@@ -255,17 +255,95 @@ document.addEventListener('DOMContentLoaded', () => {
         yearSpan.textContent = new Date().getFullYear();
     }
 
-    // --- 8. IMAGEM DE FUNDO DO HERO (fachada.jpg) ---
+    // --- 8. AUTO-RESOLUÇÃO INTELIGENTE DE IMAGENS ---
+    // Tenta caminhos alternativos automaticamente caso as imagens estejam em pastas ou extensões diferentes
+    const resolveSmartImage = (imgElement, baseName) => {
+        const potentialPaths = [
+            `public/images/${baseName}.jpg`,
+            `public/images/${baseName}.jpeg`,
+            `public/images/${baseName}.png`,
+            `public/images/${baseName}.webp`,
+            `public/images/${baseName}.JPG`,
+            `public/images/${baseName}.PNG`,
+            `images/${baseName}.jpg`,
+            `images/${baseName}.jpeg`,
+            `images/${baseName}.png`,
+            `images/${baseName}.webp`,
+            `${baseName}.jpg`,
+            `${baseName}.jpeg`,
+            `${baseName}.png`,
+            `${baseName}.webp`
+        ];
+
+        let index = 0;
+        const tryNext = () => {
+            if (index < potentialPaths.length) {
+                const nextSrc = potentialPaths[index++];
+                const testImg = new Image();
+                testImg.onload = () => {
+                    imgElement.src = nextSrc;
+                    imgElement.style.display = 'block';
+                    if (imgElement.nextElementSibling) {
+                        imgElement.nextElementSibling.style.display = 'none';
+                    }
+                };
+                testImg.onerror = tryNext;
+                testImg.src = nextSrc;
+            } else {
+                // Se nenhum caminho der certo, ativa o placeholder visual elegante
+                imgElement.style.display = 'none';
+                if (imgElement.nextElementSibling) {
+                    imgElement.nextElementSibling.style.display = 'flex';
+                }
+            }
+        };
+
+        // Inicia a tentativa se a imagem inicial falhar
+        imgElement.addEventListener('error', function onFirstError() {
+            imgElement.removeEventListener('error', onFirstError);
+            tryNext();
+        });
+    };
+
+    // Aplica resolução inteligente nas imagens principais
+    document.querySelectorAll('.img-real').forEach(img => {
+        const src = img.getAttribute('src') || '';
+        const match = src.match(/([^/]+)\.[^.]+$/);
+        if (match && match[1]) {
+            resolveSmartImage(img, match[1]);
+        }
+    });
+
+    // Imagem do Hero (fachada)
     const heroSection = document.getElementById('hero');
     if (heroSection) {
-        const heroImg = new Image();
-        heroImg.onload = () => {
-            heroSection.style.backgroundImage = `url('public/images/fachada.jpg')`;
-            heroSection.style.backgroundSize = 'cover';
-            heroSection.style.backgroundPosition = 'center';
-            heroSection.style.backgroundRepeat = 'no-repeat';
-            heroSection.classList.add('has-bg-image');
+        const heroPaths = [
+            'public/images/fachada.jpg',
+            'public/images/fachada.jpeg',
+            'public/images/fachada.png',
+            'public/images/fachada.webp',
+            'images/fachada.jpg',
+            'images/fachada.png',
+            'fachada.jpg',
+            'fachada.png'
+        ];
+        let hIdx = 0;
+        const tryHero = () => {
+            if (hIdx < heroPaths.length) {
+                const hPath = heroPaths[hIdx++];
+                const tImg = new Image();
+                tImg.onload = () => {
+                    heroSection.style.backgroundImage = `url('${hPath}')`;
+                    heroSection.style.backgroundSize = 'cover';
+                    heroSection.style.backgroundPosition = 'center';
+                    heroSection.style.backgroundRepeat = 'no-repeat';
+                    heroSection.classList.add('has-bg-image');
+                };
+                tImg.onerror = tryHero;
+                tImg.src = hPath;
+            }
         };
-        heroImg.src = 'public/images/fachada.jpg';
+        tryHero();
     }
 });
+
