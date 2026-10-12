@@ -1,8 +1,5 @@
 {
   "name": "instituto-inovar",
   "version": "1.0.0",
-  "description": "Site Oficial do Instituto Inovar",
-  "scripts": {
-    "build": "echo 'Static HTML build ready'"
-  }
+  "private": true
 }
