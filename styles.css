@@ -1671,3 +1671,60 @@ button, input, select, textarea {
         transform: none !important;
     }
 }
+
+/* ==========================================================================
+   IMAGENS REAIS — suporte para fotos adicionadas pelo cliente
+   ========================================================================== */
+
+/* Wrapper que mantém a proporção e exibe img real ou fallback */
+.img-real-wrap {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background-color: var(--color-graphite);
+}
+
+/* Proporção 4:3 para seções de serviço */
+.img-real-wrap.ratio-4-3 {
+    aspect-ratio: 4 / 3;
+}
+
+/* Imagem real cobre todo o wrapper */
+.img-real {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.img-real-wrap:hover .img-real {
+    transform: scale(1.03);
+}
+
+/* Fallback ocupa todo o espaço quando a img falha */
+.img-real-wrap .img-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-md);
+}
+
+/* Galeria: altura fixa para itens */
+.gallery-item .img-real-wrap.h-100 {
+    height: 100%;
+    min-height: 240px;
+    aspect-ratio: unset;
+}
+
+/* Hero com imagem de fundo real */
+.hero-section.has-bg-image {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

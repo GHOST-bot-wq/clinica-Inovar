@@ -254,4 +254,18 @@ document.addEventListener('DOMContentLoaded', () => {
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
+
+    // --- 8. IMAGEM DE FUNDO DO HERO (fachada.jpg) ---
+    const heroSection = document.getElementById('hero');
+    if (heroSection) {
+        const heroImg = new Image();
+        heroImg.onload = () => {
+            heroSection.style.backgroundImage = `url('public/images/fachada.jpg')`;
+            heroSection.style.backgroundSize = 'cover';
+            heroSection.style.backgroundPosition = 'center';
+            heroSection.style.backgroundRepeat = 'no-repeat';
+            heroSection.classList.add('has-bg-image');
+        };
+        heroImg.src = 'public/images/fachada.jpg';
+    }
 });
