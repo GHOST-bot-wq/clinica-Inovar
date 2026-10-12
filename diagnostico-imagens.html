@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Diagnóstico de Imagens — Instituto Inovar</title>
+<style>
+body { font-family: monospace; background: #111; color: #eee; padding: 30px; }
+h1 { color: #c9a96e; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; }
+.item { background: #222; padding: 12px; border-radius: 6px; }
+.item img { width: 100%; height: 140px; object-fit: cover; border-radius: 4px; }
+.item p { font-size: 12px; color: #aaa; margin-top: 8px; word-break: break-all; }
+.item .ok { color: #4caf50; }
+.item .fail { color: #f44; }
+</style>
+</head>
+<body>
+<h1>Diagnóstico de Imagens — Instituto Inovar</h1>
+<p>Abre este arquivo no navegador para ver quais imagens foram encontradas.</p>
+<div class="grid" id="grid"></div>
+<div id="log" style="margin-top:30px; background:#1a1a1a; padding:20px; border-radius:8px;">
+<h2 style="color:#c9a96e">Log de carregamento</h2>
+<ul id="logList"></ul>
+</div>
+<script>
+const candidates = [
+  'fachada.jpg','fachada.png','fachada.webp',
+  'institucional.jpg','institucional.png',
+  'fisioterapia.jpg','fisioterapia.png',
+  'pilates.jpg','pilates.png',
+  'estetica.jpg','estetica.png',
+  'laser.jpg','laser.png',
+  'espaco-1.jpg','espaco-1.png',
+  'espaco-2.jpg','espaco-3.jpg','espaco-4.jpg',
+  // Nomes alternativos comuns
+  'foto1.jpg','foto2.jpg','foto3.jpg','foto4.jpg','foto5.jpg',
+  'img1.jpg','img2.jpg','img3.jpg',
+  'banner.jpg','hero.jpg','capa.jpg',
+  'logo.png','logo.jpg','logo.svg',
+];
+
+const grid = document.getElementById('grid');
+const logList = document.getElementById('logList');
+
+candidates.forEach(name => {
+  const path = 'public/images/' + name;
+  const div = document.createElement('div');
+  div.className = 'item';
+  const img = document.createElement('img');
+  img.src = path;
+  img.alt = name;
+  const p = document.createElement('p');
+  img.onload = () => {
+    p.innerHTML = `<span class="ok">✓ ENCONTRADA</span><br>${name}`;
+    const li = document.createElement('li');
+    li.innerHTML = `<span style="color:#4caf50">✓</span> ${path}`;
+    logList.appendChild(li);
+  };
+  img.onerror = () => {
+    img.style.display = 'none';
+    p.innerHTML = `<span class="fail">✗ não encontrada</span><br>${name}`;
+  };
+  div.appendChild(img);
+  div.appendChild(p);
+  grid.appendChild(div);
+});
+</script>
+</body>
+</html>
